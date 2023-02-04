@@ -36,12 +36,11 @@ class PermissionUserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def to_representation(self, instance):
-        query = query_permission_user(id=instance.id)
-        permission_user = User.objects.raw(query)
+    def to_representation(self, user):
+        permission_user = list(map(lambda item: item.split('.')[-1], list(user.get_all_permissions())))
         data = []
         for perm in permission_user:
-            permission = Permission.objects.get(id=perm.id)
+            permission = Permission.objects.get(codename__contains=perm)
             data.append({"id": permission.id, "name": permission.name, "code_name": permission.codename})
         return {
             'data': data

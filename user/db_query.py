@@ -1,3 +1,4 @@
+from .models import User
 def query_permission_user(id):
-    query = "SELECT * from user_user_user_permissions where user_id = " + str(id) + ";"
-    return query
+    data_query = User.objects.raw("""SELECT id from user_user_user_permissions""")
+    return data_query
